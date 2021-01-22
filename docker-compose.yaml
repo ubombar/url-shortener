@@ -1,0 +1,26 @@
+version: '3.4'
+
+services: 
+  service.redis:
+    image: redis
+    container_name: service.redis
+    networks: 
+      - network.url.shortener
+    ports:
+      - "6379:6379"
+
+  service.shortener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service.shortener
+    ports:
+      - "8080:8080"
+    networks: 
+      - network.url.shortener
+    depends_on: 
+      - service.redis
+
+networks: 
+  network.url.shortener:
+    driver: bridge
